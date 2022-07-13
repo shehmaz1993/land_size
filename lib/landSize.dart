@@ -14,11 +14,13 @@ class _LandSizeState extends State<LandSize> {
 
     String textvalue='';
     String land_type='';
+    List land_measurement=['Hector','Decimal','Katha','Bigha'];
 
     bool _isSelected2=false;
     bool _isSelected3=false;
     bool _isSelected4=false;
     bool _isSelected1=false;
+
     Future<void> sendInfo() async {
 
      try{
@@ -34,9 +36,19 @@ class _LandSizeState extends State<LandSize> {
            })
        );
        if(response.statusCode==201){
-         print('api calling is successsful......');
+         print('api calling is successful......');
          final Map user_info = json.decode(response.body);
          print(user_info);
+         final snackBar = SnackBar(
+           content: const Text('User information has been saved'),
+           backgroundColor: (Colors.black12),
+           action: SnackBarAction(
+             label: 'dismiss',
+             onPressed: () {
+             },
+           ),
+         );
+         ScaffoldMessenger.of(context).showSnackBar(snackBar);
        }
        else{
          throw Exception('Request Error: ${response.statusCode}');
@@ -49,6 +61,7 @@ class _LandSizeState extends State<LandSize> {
 
 
     }
+
 
   @override
   Widget build(BuildContext context) {
@@ -356,4 +369,50 @@ class _LandSizeState extends State<LandSize> {
       ),
     );
   }
+  Widget checkBox(){
+      return  Row(
+        children: [
+          GestureDetector(
+
+            onTap: (){
+              setState((){
+
+                _isSelected1=!_isSelected1;
+                _isSelected2=false;
+                _isSelected3=false;
+                _isSelected4=false;
+                land_type='hector';
+
+              });
+            },
+            child:  Container(
+              height: 30,
+              width: 30,
+              decoration: BoxDecoration(
+                  color:Colors.transparent,
+                  borderRadius: BorderRadius.circular(55.0),
+                  border:Border.all(color: Colors.grey,width: 2)
+              ),
+
+
+              child: AnimatedContainer(
+                duration:const Duration(milliseconds: 200),
+                curve: Curves.fastLinearToSlowEaseIn,
+                decoration: BoxDecoration(
+                    color:_isSelected1? Colors.green:Colors.transparent,
+                    borderRadius: BorderRadius.circular(55.0),
+                    border: _isSelected1?null:Border.all(color: Colors.grey,width: 0)
+                ),
+                height: 2,
+                width: 2,
+              ),
+            ),
+
+          ),
+          const SizedBox(height: 50,width: 20,),
+          const Text('Hector')
+
+        ],
+      );
+   }
 }
